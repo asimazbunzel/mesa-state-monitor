@@ -3,6 +3,7 @@ package main
 import (
    "bufio"
    "fmt"
+   "io"
    "log"
    "strings"
    "strconv"
@@ -14,6 +15,14 @@ type MESAstar_info struct {
    version int
    date string
    history_name string
+   model_number int
+   num_zones int
+   mass float64
+   log_mdot float64
+   age float64
+   center_h1, center_he4 float64
+   num_retries, num_iters int
+   elapsed_time float64
 }
 
 // struct holding info on MESAbinary
@@ -23,6 +32,44 @@ type MESAbinary_info struct {
    MT_case string
    history_name string
 }
+
+
+// function retrieve from this post:
+// https://stackoverflow.com/questions/17863821/how-to-read-last-lines-from-a-big-file-with-go-every-10-secs
+func getLastLineWithSeek (filepath string) string {
+    fileHandle, err := os.Open(filepath)
+
+    if err != nil {
+        panic("Cannot open file")
+        os.Exit(1)
+    }
+    defer fileHandle.Close()
+
+    line := ""
+    var cursor int64 = 0
+    stat, _ := fileHandle.Stat()
+    filesize := stat.Size()
+    for {
+        cursor -= 1
+        fileHandle.Seek(cursor, io.SeekEnd)
+
+        char := make([]byte, 1)
+        fileHandle.Read(char)
+
+        if cursor != -1 && (char[0] == 10 || char[0] == 13) { // stop if we find a line
+            break
+        }
+
+        line = fmt.Sprintf("%s%s", string(char), line) // there is more efficient way
+
+        if cursor == -filesize { // stop if we are at the begining
+            break
+        }
+    }
+
+    return line
+}
+
 
 func grab_star_header (fname string, star_info *MESAstar_info) {
 
@@ -82,6 +129,136 @@ func grab_star_header (fname string, star_info *MESAstar_info) {
 }
 
 
+func grab_star_run_info (fname string, star_info *MESAstar_info) {
+
+   nr_column_names := 6
+
+   // open star file
+   fstar, err := os.Open(fname)
+   if err != nil {log.Fatal(err)}
+   defer fstar.Close()
+
+   // scan star file
+   scanner := bufio.NewScanner(fstar)
+
+   // arrays holding star header names & values
+   var column_names []string
+   var column_values []string
+   var column_names_found bool
+   lineCount := 0
+
+   for scanner.Scan() {
+
+      lineCount++
+
+      // get header names
+      if lineCount == nr_column_names {
+         column_names = strings.Fields(scanner.Text())
+         column_names_found = true
+      }
+
+      if column_names_found {break}
+   }
+
+   if (column_names_found) {
+      column_values = strings.Fields(getLastLineWithSeek(fname))
+   }
+
+   if (column_names_found) {
+      for k, name := range column_names {
+
+         val := column_values[k]
+
+         if name == "model_number" {
+            i, err := strconv.Atoi(val)
+            // handle error
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.model_number = i
+         }
+         if name == "num_zones" {
+            i, err := strconv.Atoi(val)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.num_zones = i
+         }
+         if name == "star_mass" {
+            i, err := strconv.ParseFloat(val, 64)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.mass = i
+         }
+         if name == "log_abs_mdot" {
+            i, err := strconv.ParseFloat(val, 64)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.log_mdot = i
+         }
+         if name == "star_age" {
+            i, err := strconv.ParseFloat(val, 64)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.age = i
+         }
+         if name == "center_h1" {
+            i, err := strconv.ParseFloat(val, 64)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.center_h1 = i
+         }
+         if name == "center_he4" {
+            i, err := strconv.ParseFloat(val, 64)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.center_he4 = i
+         }
+         if name == "num_retries" {
+            i, err := strconv.Atoi(val)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.num_retries = i
+         }
+         if name == "num_iters" {
+            i, err := strconv.Atoi(val)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.num_iters = i
+         }
+         if name == "elapsed_time" {
+            i, err := strconv.ParseFloat(val, 64)  // i is in sec
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.elapsed_time = i / 60 // from sec to min
+         }
+      }
+   }
+
+   if err := scanner.Err(); err != nil {
+      log.Fatal(err)
+   }
+}
+
+
 func main() {
 
    // check if this is a binary or single star evolution
@@ -100,10 +277,12 @@ func main() {
    Info := new(MESAstar_info)
    Info.history_name = starfilePath
    grab_star_header(starfilePath, Info)
-   fmt.Println(Info)
 
    // now get info on the star using the row containing names for data columns
    // and the last row written by the MESA code
+   grab_star_run_info(starfilePath, Info)
+
+   fmt.Println(Info)
 
    if (is_binary_evolution) {
       BInfo := new(MESAbinary_info)
