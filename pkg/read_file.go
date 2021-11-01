@@ -257,35 +257,3 @@ func grab_star_run_info (fname string, star_info *MESAstar_info) {
       log.Fatal(err)
    }
 }
-
-
-func main() {
-
-   // check if this is a binary or single star evolution
-   if len(os.Args) < 2 {log.Fatal("need star filename (and binary if present)")}
-
-   // get star history fname as first argument & binary as second
-   var is_binary_evolution bool
-   starfilePath := os.Args[1]
-   if len(os.Args) == 3 {
-      is_binary_evolution = true
-      binaryfilePath := os.Args[2]
-      fmt.Println(binaryfilePath)
-   }
-
-   // create struct of MESAstar_info
-   Info := new(MESAstar_info)
-   Info.history_name = starfilePath
-   grab_star_header(starfilePath, Info)
-
-   // now get info on the star using the row containing names for data columns
-   // and the last row written by the MESA code
-   grab_star_run_info(starfilePath, Info)
-
-   fmt.Println(Info)
-
-   if (is_binary_evolution) {
-      BInfo := new(MESAbinary_info)
-      BInfo.history_name = ""
-   }
-}
