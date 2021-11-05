@@ -1,4 +1,4 @@
-package main
+package read_file
 
 import (
    "bufio"
@@ -14,7 +14,7 @@ import (
 type MESAstar_info struct {
    version int
    date string
-   history_name string
+   History_name string
    model_number int
    num_zones int
    mass float64
@@ -30,7 +30,7 @@ type MESAbinary_info struct {
    period float64
    star_1_mass, star_2_mass float64
    MT_case string
-   history_name string
+   History_name string
 }
 
 
@@ -71,7 +71,7 @@ func getLastLineWithSeek (filepath string) string {
 }
 
 
-func grab_star_header (fname string, star_info *MESAstar_info) {
+func Grab_star_header (fname string, star_info *MESAstar_info) {
 
    // MESA specfic row numbers for header names & values in history output
    nr_header_names := 2
@@ -129,7 +129,7 @@ func grab_star_header (fname string, star_info *MESAstar_info) {
 }
 
 
-func grab_star_run_info (fname string, star_info *MESAstar_info) {
+func Grab_star_run_info (fname string, star_info *MESAstar_info) {
 
    nr_column_names := 6
 
