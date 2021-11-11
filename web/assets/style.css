@@ -17,6 +17,7 @@ html {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  background-color: var(--light-grey);
 }
 
 a {
@@ -52,7 +53,7 @@ header {
   right: 0;
   display: flex;
   justify-content: space-between;
-  background-color: var(--light-green);
+  background-color: var(--dark-grey);
   padding: 5px 10px;
   align-items: center;
 }
@@ -98,7 +99,8 @@ form {
   display: flex;
   align-items: flex-start;
   margin-bottom: 30px;
-  border: 1px solid var(--light-grey);
+  // border: 1px solid var(--light-grey);
+  border: 1px solid black;
   padding: 15px;
   border-radius: 4px;
   justify-content: space-between;
