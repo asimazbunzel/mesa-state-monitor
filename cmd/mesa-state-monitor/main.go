@@ -9,12 +9,16 @@ import (
    "mesa-state-monitor/pkg"
 )
 
-var tpl = template.Must(template.ParseFiles("web/index.html"))
+var tpl_mesastar = template.Must(template.ParseFiles("web/index-mesastar.html"))
+var tpl_mesabinary = template.Must(template.ParseFiles("web/index-mesabinary.html"))
 
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	// w.Write([]byte("<h1>Hello World!</h1>"))
-   tpl.Execute(w, nil)
+func indexHandler_mesastar(w http.ResponseWriter, r *http.Request) {
+   tpl_mesastar.Execute(w, nil)
+}
+
+func indexHandler_mesabinary(w http.ResponseWriter, r *http.Request) {
+   tpl_mesabinary.Execute(w, nil)
 }
 
 func main() {
@@ -25,9 +29,10 @@ func main() {
    // get star history fname as first argument & binary as second
    var is_binary_evolution bool
    starfilePath := os.Args[1]
+   binaryfilePath := ""
    if len(os.Args) == 3 {
       is_binary_evolution = true
-      binaryfilePath := os.Args[2]
+      binaryfilePath = os.Args[2]
       fmt.Println(binaryfilePath)
    }
 
@@ -40,8 +45,13 @@ func main() {
    fmt.Printf("MESAstar_info: %+v\n", *info)
 
    if (is_binary_evolution) {
-      BInfo := new(read_file.MESAbinary_info)
-      BInfo.History_name = ""
+      binfo := new(read_file.MESAbinary_info)
+      binfo.History_name = binaryfilePath
+      binfo.MT_case = "none"
+      read_file.Grab_binary_header(binaryfilePath, binfo)
+      read_file.Grab_binary_run_info(binaryfilePath, binfo)
+
+      fmt.Printf("MESAbinary_info: %+v\n", *binfo)
    }
 
    // set port number
@@ -55,7 +65,13 @@ func main() {
    // open http server
 	mux := http.NewServeMux()
    mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
-	mux.HandleFunc("/", indexHandler)
+
+   if (is_binary_evolution) {
+      mux.HandleFunc("/", indexHandler_mesabinary)
+   } else {
+      mux.HandleFunc("/", indexHandler_mesastar)
+   }
+
 	http.ListenAndServe(":"+port, mux)
 
 }
