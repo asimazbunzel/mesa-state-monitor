@@ -24,10 +24,10 @@
                <div>
                   <h3 class="title">Metadata</h3>
                   <p class="description">
-                  <strong>MESA version</strong>: r15140 <br>
-                  <strong>Date</strong>: 20211103 <br>
-                  <strong>Mass (solar masses)</strong>: 20 <br>
-                  <strong>Metallicity</strong>: 0.017
+                  <strong>MESA version</strong>: {{ .Version }} <br>
+                  <strong>Date</strong>: {{ .Date }} <br>
+                  <strong>Mass (solar masses)</strong>: {{ .Mass }} <br>
+                  <strong>Metallicity</strong>: {{ .Metallicity }}
                   </p>
                </div>
             </li>
@@ -36,17 +36,17 @@
                <div>
                   <h3 class="title">Status</h3>
                   <p class="description">
-                  <strong>model number</strong>: 8685 <br>
-                  <strong>number of zones</strong>: 930 <br>
-                  <strong>number of retries</strong>: 29 <br>
-                  <strong>number of iterations</strong>: 0 <br>
-                  <strong>elapsed time (minutes)</strong>: 32 <br>
+                  <strong>model number</strong>: {{ .Model_number }} <br>
+                  <strong>number of zones</strong>: {{ .Num_zones }} <br>
+                  <strong>number of retries</strong>: {{ .Num_retries }} <br>
+                  <strong>number of iterations</strong>: {{ .Num_iters }} <br>
+                  <strong>elapsed time (minutes)</strong>: {{ .Elapsed_time }} <br>
 
-                  <strong>actual mass (solar masses)</strong>: 20 <br>
-                  <strong>mass loss rate (solar masses per year)</strong>: 0.017 <br>
-                  <strong>age (years)</strong>: 10000 <br>
-                  <strong>center H abundance</strong>: 0.01 <br>
-                  <strong>center He abundance</strong>: 0.99 <br><br>
+                  <strong>actual mass (solar masses)</strong>: {{ .Mass }} <br>
+                  <strong>log mass loss rate (solar masses per year)</strong>: {{ .Log_mdot }} <br>
+                  <strong>age (years)</strong>: {{ .Age }} <br>
+                  <strong>center H abundance</strong>: {{ .Center_h1 }} <br>
+                  <strong>center He abundance</strong>: {{ .Center_he4 }} <br><br>
                   <strong>evolutionary stage</strong>: <strong><u>MS star</u></strong>
                   </p>
                </div>
