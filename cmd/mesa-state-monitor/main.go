@@ -1,7 +1,7 @@
 package main
 
 import (
-   "fmt"
+   // "fmt"
    "html/template"
    "log"
 	"net/http"
@@ -13,13 +13,38 @@ var tpl_mesastar = template.Must(template.ParseFiles("web/index-mesastar.html"))
 var tpl_mesabinary = template.Must(template.ParseFiles("web/index-mesabinary.html"))
 
 
-func indexHandler_mesastar(w http.ResponseWriter, r *http.Request) {
-   tpl_mesastar.Execute(w, nil)
+type wrapperStruct struct {
+   filename string
 }
 
-func indexHandler_mesabinary(w http.ResponseWriter, r *http.Request) {
+
+func (ws wrapperStruct) indexHandler_mesastar(w http.ResponseWriter, r *http.Request) {
+
+   starfilePath := ws.filename
+
+   // create struct of MESAstar_info
+   info := new(read_file.MESAstar_info)
+   info.History_name = starfilePath
+   read_file.Grab_star_header(starfilePath, info)
+   read_file.Grab_star_run_info(starfilePath, info)
+
+   tpl_mesastar.Execute(w, info)
+}
+
+func (ws wrapperStruct) indexHandler_mesabinary(w http.ResponseWriter, r *http.Request) {
+
+   binaryfilePath := ws.filename
+
+   // create struct of MESAbinary_info   
+   binfo := new(read_file.MESAbinary_info)
+   binfo.History_name = ""
+   binfo.MT_case = "none"
+   read_file.Grab_binary_header(binaryfilePath, binfo)
+   read_file.Grab_binary_run_info(binaryfilePath, binfo)
+
    tpl_mesabinary.Execute(w, nil)
 }
+
 
 func main() {
 
@@ -33,26 +58,8 @@ func main() {
    if len(os.Args) == 3 {
       is_binary_evolution = true
       binaryfilePath = os.Args[2]
-      fmt.Println(binaryfilePath)
    }
 
-   // create struct of MESAstar_info
-   info := new(read_file.MESAstar_info)
-   info.History_name = starfilePath
-   read_file.Grab_star_header(starfilePath, info)
-   read_file.Grab_star_run_info(starfilePath, info)
-
-   fmt.Printf("MESAstar_info: %+v\n", *info)
-
-   if (is_binary_evolution) {
-      binfo := new(read_file.MESAbinary_info)
-      binfo.History_name = binaryfilePath
-      binfo.MT_case = "none"
-      read_file.Grab_binary_header(binaryfilePath, binfo)
-      read_file.Grab_binary_run_info(binaryfilePath, binfo)
-
-      fmt.Printf("MESAbinary_info: %+v\n", *binfo)
-   }
 
    // set port number
    port := os.Getenv("PORT")
@@ -60,18 +67,27 @@ func main() {
 		port = "3000"
 	}
 
-   fs := http.FileServer(http.Dir("./web/assets/"))
-
-   // open http server
+   // configs
 	mux := http.NewServeMux()
+   fs := http.FileServer(http.Dir("./web/assets/"))
    mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
+   // serve
    if (is_binary_evolution) {
-      mux.HandleFunc("/", indexHandler_mesabinary)
+
+      handlers := wrapperStruct{filename: binaryfilePath}
+
+      // open http server with template of MESAstar (single evolution)
+      mux.HandleFunc("/", handlers.indexHandler_mesastar)
+
    } else {
-      mux.HandleFunc("/", indexHandler_mesastar)
+
+      handlers := wrapperStruct{filename: starfilePath}
+
+      // open http server with template of MESAbinary (binary evolution)
+      mux.HandleFunc("/", handlers.indexHandler_mesastar)
+
    }
 
-	http.ListenAndServe(":"+port, mux)
-
+   http.ListenAndServe(":"+port, mux)
 }

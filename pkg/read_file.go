@@ -12,17 +12,18 @@ import (
 
 // struct holding info on MESAstar
 type MESAstar_info struct {
-   version int
-   date string
+   Version int
+   Date string
    History_name string
-   model_number int
-   num_zones int
-   mass float64
-   log_mdot float64
-   age float64
-   center_h1, center_he4 float64
-   num_retries, num_iters int
-   elapsed_time float64
+   Model_number int
+   Num_zones int
+   Mass float64
+   Log_mdot float64
+   Age float64
+   Center_h1, Center_he4 float64
+   Metallicity float64
+   Num_retries, Num_iters int
+   Elapsed_time float64
 }
 
 // struct holding info on MESAbinary
@@ -122,9 +123,9 @@ func Grab_star_header (fname string, star_info *MESAstar_info) {
                   fmt.Println(err)
                   os.Exit(2)
                }
-               star_info.version = i
+               star_info.Version = i
             }
-            if name == "date" {star_info.date = header_values[k]}
+            if name == "date" {star_info.Date = header_values[k]}
          }
       }
    }
@@ -182,7 +183,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.model_number = i
+            star_info.Model_number = i
          }
          if name == "num_zones" {
             i, err := strconv.Atoi(val)
@@ -190,7 +191,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.num_zones = i
+            star_info.Num_zones = i
          }
          if name == "star_mass" {
             i, err := strconv.ParseFloat(val, 64)
@@ -198,7 +199,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.mass = i
+            star_info.Mass = i
          }
          if name == "log_abs_mdot" {
             i, err := strconv.ParseFloat(val, 64)
@@ -206,7 +207,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.log_mdot = i
+            star_info.Log_mdot = i
          }
          if name == "star_age" {
             i, err := strconv.ParseFloat(val, 64)
@@ -214,7 +215,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.age = i
+            star_info.Age = i
          }
          if name == "center_h1" {
             i, err := strconv.ParseFloat(val, 64)
@@ -222,7 +223,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.center_h1 = i
+            star_info.Center_h1 = i
          }
          if name == "center_he4" {
             i, err := strconv.ParseFloat(val, 64)
@@ -230,7 +231,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.center_he4 = i
+            star_info.Center_he4 = i
          }
          if name == "num_retries" {
             i, err := strconv.Atoi(val)
@@ -238,7 +239,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.num_retries = i
+            star_info.Num_retries = i
          }
          if name == "num_iters" {
             i, err := strconv.Atoi(val)
@@ -246,7 +247,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.num_iters = i
+            star_info.Num_iters = i
          }
          if name == "elapsed_time" {
             i, err := strconv.ParseFloat(val, 64)  // i is in sec
@@ -254,10 +255,12 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.elapsed_time = i / 60 // from sec to min
+            star_info.Elapsed_time = i / 60 // from sec to min
          }
       }
    }
+
+   star_info.Metallicity = 1 - (star_info.Center_h1 + star_info.Center_he4)
 
    if err := scanner.Err(); err != nil {
       log.Fatal(err)
