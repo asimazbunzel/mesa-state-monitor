@@ -1,4 +1,4 @@
-package read_file
+package io
 
 import (
    "bufio"
@@ -21,9 +21,10 @@ type MESAstar_info struct {
    Log_mdot float64
    Age float64
    Center_h1, Center_he4 float64
-   Metallicity float64
+   Log_T_cntr float64
    Num_retries, Num_iters int
    Elapsed_time float64
+   Evol_state string
 }
 
 // struct holding info on MESAbinary
@@ -233,6 +234,14 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
             }
             star_info.Center_he4 = i
          }
+         if name == "log_center_T" {
+            i, err := strconv.ParseFloat(val, 64)
+            if err != nil {
+               fmt.Println(err)
+               os.Exit(2)
+            }
+            star_info.Log_T_cntr = i
+         }
          if name == "num_retries" {
             i, err := strconv.Atoi(val)
             if err != nil {
@@ -259,8 +268,6 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
          }
       }
    }
-
-   star_info.Metallicity = 1 - (star_info.Center_h1 + star_info.Center_he4)
 
    if err := scanner.Err(); err != nil {
       log.Fatal(err)
