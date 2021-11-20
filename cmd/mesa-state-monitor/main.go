@@ -6,7 +6,8 @@ import (
    "log"
 	"net/http"
 	"os"
-   "mesa-state-monitor/pkg"
+   "mesa-state-monitor/pkg/io"
+   "mesa-state-monitor/pkg/utils"
 )
 
 var tpl_mesastar = template.Must(template.ParseFiles("web/index-mesastar.html"))
@@ -23,10 +24,11 @@ func (ws wrapperStruct) indexHandler_mesastar(w http.ResponseWriter, r *http.Req
    starfilePath := ws.filename
 
    // create struct of MESAstar_info
-   info := new(read_file.MESAstar_info)
+   info := new(io.MESAstar_info)
    info.History_name = starfilePath
-   read_file.Grab_star_header(starfilePath, info)
-   read_file.Grab_star_run_info(starfilePath, info)
+   io.Grab_star_header(starfilePath, info)
+   io.Grab_star_run_info(starfilePath, info)
+   info.Evol_state = utils.Set_evolutionary_stage(info.Mass, info.Center_h1, info.Center_he4, info.Log_T_cntr)
 
    tpl_mesastar.Execute(w, info)
 }
@@ -36,11 +38,11 @@ func (ws wrapperStruct) indexHandler_mesabinary(w http.ResponseWriter, r *http.R
    binaryfilePath := ws.filename
 
    // create struct of MESAbinary_info   
-   binfo := new(read_file.MESAbinary_info)
+   binfo := new(io.MESAbinary_info)
    binfo.History_name = ""
    binfo.MT_case = "none"
-   read_file.Grab_binary_header(binaryfilePath, binfo)
-   read_file.Grab_binary_run_info(binaryfilePath, binfo)
+   io.Grab_binary_header(binaryfilePath, binfo)
+   io.Grab_binary_run_info(binaryfilePath, binfo)
 
    tpl_mesabinary.Execute(w, nil)
 }

@@ -26,8 +26,6 @@
                   <p class="description">
                   <strong>MESA version</strong>: {{ .Version }} <br>
                   <strong>Date</strong>: {{ .Date }} <br>
-                  <strong>Mass (solar masses)</strong>: {{ .Mass }} <br>
-                  <strong>Metallicity</strong>: {{ .Metallicity }}
                   </p>
                </div>
             </li>
@@ -41,13 +39,13 @@
                   <strong>number of retries</strong>: {{ .Num_retries }} <br>
                   <strong>number of iterations</strong>: {{ .Num_iters }} <br>
                   <strong>elapsed time (minutes)</strong>: {{ .Elapsed_time }} <br>
-
                   <strong>actual mass (solar masses)</strong>: {{ .Mass }} <br>
                   <strong>log mass loss rate (solar masses per year)</strong>: {{ .Log_mdot }} <br>
                   <strong>age (years)</strong>: {{ .Age }} <br>
                   <strong>center H abundance</strong>: {{ .Center_h1 }} <br>
-                  <strong>center He abundance</strong>: {{ .Center_he4 }} <br><br>
-                  <strong>evolutionary stage</strong>: <strong><u>MS star</u></strong>
+                  <strong>center He abundance</strong>: {{ .Center_he4 }} <br>
+                  <strong>log central T (K)</strong>: {{ .Log_T_cntr }} <br><br>
+                  <strong>evolutionary stage</strong>: <strong><u>{{ .Evol_state }}</u></strong>
                   </p>
                </div>
             </li>
