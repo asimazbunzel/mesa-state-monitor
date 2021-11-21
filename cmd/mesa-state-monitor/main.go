@@ -1,11 +1,11 @@
 package main
 
 import (
-   // "fmt"
    "html/template"
    "log"
 	"net/http"
 	"os"
+
    "mesa-state-monitor/pkg/io"
    "mesa-state-monitor/pkg/utils"
 )
@@ -19,6 +19,7 @@ type wrapperStruct struct {
 }
 
 
+// index html for MESAstar 
 func (ws wrapperStruct) indexHandler_mesastar(w http.ResponseWriter, r *http.Request) {
 
    starfilePath := ws.filename
@@ -28,11 +29,13 @@ func (ws wrapperStruct) indexHandler_mesastar(w http.ResponseWriter, r *http.Req
    info.History_name = starfilePath
    io.Grab_star_header(starfilePath, info)
    io.Grab_star_run_info(starfilePath, info)
-   info.Evol_state = utils.Set_evolutionary_stage(info.Mass, info.Center_h1, info.Center_he4, info.Log_T_cntr)
+   info.Evol_state = utils.SetEvolutionaryStage(info.Mass, info.Center_h1, info.Center_he4, info.Log_T_cntr)
 
    tpl_mesastar.Execute(w, info)
 }
 
+
+// index html for MESAbinary
 func (ws wrapperStruct) indexHandler_mesabinary(w http.ResponseWriter, r *http.Request) {
 
    binaryfilePath := ws.filename
@@ -43,6 +46,7 @@ func (ws wrapperStruct) indexHandler_mesabinary(w http.ResponseWriter, r *http.R
    binfo.MT_case = "none"
    io.Grab_binary_header(binaryfilePath, binfo)
    io.Grab_binary_run_info(binaryfilePath, binfo)
+   // binfo.MT_case = utils.SetMTCase(binfo.Radius1, binfo.RLobe1, info.EvolState)
 
    tpl_mesabinary.Execute(w, nil)
 }

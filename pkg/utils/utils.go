@@ -2,7 +2,7 @@ package utils
 
 
 // define phase of evolution for a star based on abundances and central temperature
-func Set_evolutionary_stage(mass float64, center_h1 float64, center_he4 float64, log_T_cntr float64) string {
+func SetEvolutionaryStage(mass float64, center_h1 float64, center_he4 float64, log_T_cntr float64) string {
 
    // H threshold
    h1_threshold := 1e-5
@@ -56,4 +56,25 @@ func Set_evolutionary_stage(mass float64, center_h1 float64, center_he4 float64,
    }
 
    return "none"
+}
+
+
+// check for MT case in a binary
+func SetMTCase(radius float64, rlobe float64, stage string) string {
+
+   if (radius < rlobe) {
+
+      return "none"
+
+   } else {
+
+      if (stage == "MS star") {return "Case A"}
+      
+      if (stage == "HG star") {return "early Case B"}
+
+      if (stage == "CheB star") {return "Case B"}
+
+      return "Case C"
+
+   }
 }
