@@ -1,8 +1,15 @@
 package io
 
 
-var star_history_name = "history.data"
-var binary_history_name = "binary_history.data"
+import (
+   "fmt"
+   "log"
+   "os"
+)
+
+
+var starHistoryName = "history.data"
+var binaryHistoryName = "binary_history.data"
 
 var binaryLogDirectory = "LOGS_binary"
 var starLogDirectory = "LOGS"
@@ -43,8 +50,38 @@ type MESAbinary_info struct {
 }
 
 
+// bool function to find out if path contains a single or binary evolution
 func IsBinary (path string) bool {
 
-   return false
+   log.Print("searching for binary evolution")
 
+   binaryFile := fmt.Sprintf("%s/%s", path, binaryHistoryName)
+
+   log.Print("looking for file ", binaryFile)
+
+   _, err := os.Open(binaryFile)
+   if err != nil {
+
+      log.Print(binaryFile, " not found. now searching inside ", binaryLogDirectory, " folder")
+
+      binaryFile := fmt.Sprintf("%s/%s/%s", path, binaryLogDirectory, binaryHistoryName)
+
+      _, err := os.Open(binaryFile)
+      if err != nil {
+
+         log.Print("binary logs not found. single evolution assumed")
+         return false
+
+      } else {
+
+         log.Print("found binary logs. binary evolution assumed")
+         return true
+
+      }
+   } else {
+
+      log.Print("found binary logs. binary evolution assumed")
+      return true
+
+   }
 }
