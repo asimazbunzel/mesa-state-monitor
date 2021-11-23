@@ -30,10 +30,10 @@ func (ws WrapperStruct) indexHandler_mesastar(w http.ResponseWriter, r *http.Req
    // create struct of MESAstar_info
    log.Printf("(re)loading struct with MESAstar info")
    info := new(io.MESAstar_info)
-   info.History_name = starfilePath
-   io.Grab_star_header(starfilePath, info)
-   io.Grab_star_run_info(starfilePath, info)
-   info.Evol_state = utils.SetEvolutionaryStage(info.Mass, info.Center_h1, info.Center_he4, info.Log_T_cntr)
+   info.HistoryName = starfilePath
+   io.GrabStarHeader(starfilePath, info)
+   io.GrabStarRunInfo(starfilePath, info)
+   info.EvolState = utils.SetEvolutionaryStage(info.Mass, info.CenterH1, info.CenterHe4, info.LogTcntr)
 
    tpl_mesastar := template.Must(template.ParseFiles("web/index-mesastar.html"))
    tpl_mesastar.Execute(w, info)
@@ -55,16 +55,16 @@ func (ws WrapperStruct) indexHandler_mesabinary(w http.ResponseWriter, r *http.R
    binfo := new(io.MESAbinary_info)
    binfo.HistoryName = ""
    binfo.MTCase = "none"
-   io.Grab_binary_header(binaryfilePath, binfo)
-   io.Grab_binary_run_info(binaryfilePath, binfo)
+   io.GrabBinaryHeader(binaryfilePath, binfo)
+   io.GrabBinaryRunInfo(binaryfilePath, binfo)
 
    // create struct of MESAstar_info for star 1
    log.Printf("(re)loading struct with MESAstar info for star 1")
    info1 := new(io.MESAstar_info)
-   info1.History_name = star1filePath
-   io.Grab_star_header(star1filePath, info1)
-   io.Grab_star_run_info(star1filePath, info1)
-   info1.Evol_state = utils.SetEvolutionaryStage(info1.Mass, info1.Center_h1, info1.Center_he4, info1.Log_T_cntr)
+   info1.HistoryName = star1filePath
+   io.GrabStarHeader(star1filePath, info1)
+   io.GrabStarRunInfo(star1filePath, info1)
+   info1.EvolState = utils.SetEvolutionaryStage(info1.Mass, info1.CenterH1, info1.CenterHe4, info1.LogTcntr)
 
    // create struct of MESAstar_info for star 2
    info2 := new(io.MESAstar_info)
@@ -72,10 +72,10 @@ func (ws WrapperStruct) indexHandler_mesabinary(w http.ResponseWriter, r *http.R
    if (binfo.PointMassIndex == 0) {
 
       log.Printf("(re)loading struct with MESAstar info for star 2")
-      info2.History_name = star2filePath
-      io.Grab_star_header(star2filePath, info2)
-      io.Grab_star_run_info(star2filePath, info2)
-      info2.Evol_state = utils.SetEvolutionaryStage(info2.Mass, info2.Center_h1, info2.Center_he4, info2.Log_T_cntr)
+      info2.HistoryName = star2filePath
+      io.GrabStarHeader(star2filePath, info2)
+      io.GrabStarRunInfo(star2filePath, info2)
+      info2.EvolState = utils.SetEvolutionaryStage(info2.Mass, info2.CenterH1, info2.CenterHe4, info2.LogTcntr)
 
       have2stars = true
 
@@ -84,11 +84,11 @@ func (ws WrapperStruct) indexHandler_mesabinary(w http.ResponseWriter, r *http.R
    // need to set case of MT (if present)
    if (binfo.DonorIndex == 1) {
 
-      binfo.MTCase = utils.SetMTCase(binfo.RelRLOF1, info1.Evol_state)
+      binfo.MTCase = utils.SetMTCase(binfo.RelRLOF1, info1.EvolState)
 
    } else {
 
-      binfo.MTCase = utils.SetMTCase(binfo.RelRLOF2, info2.Evol_state)
+      binfo.MTCase = utils.SetMTCase(binfo.RelRLOF2, info2.EvolState)
 
    }
 

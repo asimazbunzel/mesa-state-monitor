@@ -21,17 +21,17 @@ var star2LogDirectory = "LOGS2"
 type MESAstar_info struct {
    Version int
    Date string
-   History_name string
-   Model_number int
-   Num_zones int
+   HistoryName string
+   ModelNumber int
+   NumZones int
    Mass float64
-   Log_mdot float64
+   LogMdot float64
    Age float64
-   Center_h1, Center_he4 float64
-   Log_T_cntr float64
-   Num_retries, Num_iters int
-   Elapsed_time float64
-   Evol_state string
+   CenterH1, CenterHe4 float64
+   LogTcntr float64
+   NumRetries, NumIters int
+   ElapsedTime float64
+   EvolState string
 }
 
 

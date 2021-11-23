@@ -45,7 +45,7 @@ func getLastLineWithSeek (filepath string) string {
 }
 
 
-func Grab_star_header (fname string, star_info *MESAstar_info) {
+func GrabStarHeader (fname string, star_info *MESAstar_info) {
 
    // MESA specfic row numbers for header names & values in history output
    nr_header_names := 2
@@ -103,7 +103,7 @@ func Grab_star_header (fname string, star_info *MESAstar_info) {
 }
 
 
-func Grab_star_run_info (fname string, star_info *MESAstar_info) {
+func GrabStarRunInfo (fname string, star_info *MESAstar_info) {
 
    nr_column_names := 6
 
@@ -150,7 +150,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Model_number = i
+            star_info.ModelNumber = i
          }
          if name == "num_zones" {
             i, err := strconv.Atoi(val)
@@ -158,7 +158,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Num_zones = i
+            star_info.NumZones = i
          }
          if name == "star_mass" {
             i, err := strconv.ParseFloat(val, 64)
@@ -174,7 +174,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Log_mdot = i
+            star_info.LogMdot = i
          }
          if name == "star_age" {
             i, err := strconv.ParseFloat(val, 64)
@@ -190,7 +190,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Center_h1 = i
+            star_info.CenterH1 = i
          }
          if name == "center_he4" {
             i, err := strconv.ParseFloat(val, 64)
@@ -198,7 +198,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Center_he4 = i
+            star_info.CenterHe4 = i
          }
          if name == "log_center_T" {
             i, err := strconv.ParseFloat(val, 64)
@@ -206,7 +206,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Log_T_cntr = i
+            star_info.LogTcntr = i
          }
          if name == "num_retries" {
             i, err := strconv.Atoi(val)
@@ -214,7 +214,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Num_retries = i
+            star_info.NumRetries = i
          }
          if name == "num_iters" {
             i, err := strconv.Atoi(val)
@@ -222,7 +222,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Num_iters = i
+            star_info.NumIters = i
          }
          if name == "elapsed_time" {
             i, err := strconv.ParseFloat(val, 64)  // i is in sec
@@ -230,7 +230,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            star_info.Elapsed_time = i / 60 // from sec to min
+            star_info.ElapsedTime = i / 60 // from sec to min
          }
       }
    }
@@ -241,7 +241,7 @@ func Grab_star_run_info (fname string, star_info *MESAstar_info) {
 }
 
 
-func Grab_binary_header (fname string, binary_info *MESAbinary_info) {
+func GrabBinaryHeader (fname string, binary_info *MESAbinary_info) {
 
    // MESA specfic row numbers for header names & values in history output
    nr_header_names := 2
@@ -314,7 +314,7 @@ func Grab_binary_header (fname string, binary_info *MESAbinary_info) {
 }
 
 
-func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
+func GrabBinaryRunInfo (fname string, binary_info *MESAbinary_info) {
 
    nr_column_names := 6
 
