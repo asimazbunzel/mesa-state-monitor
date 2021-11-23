@@ -60,16 +60,16 @@ func SetEvolutionaryStage(mass float64, center_h1 float64, center_he4 float64, l
 
 
 // check for MT case in a binary
-func SetMTCase(radius float64, rlobe float64, stage string) string {
+func SetMTCase(rel_rlof float64, stage string) string {
 
-   if (radius < rlobe) {
+   if (rel_rlof < 0) {
 
-      return "none"
+      return "No MT (R < RL)"
 
    } else {
 
       if (stage == "MS star") {return "Case A"}
-      
+
       if (stage == "HG star") {return "early Case B"}
 
       if (stage == "CheB star") {return "Case B"}
