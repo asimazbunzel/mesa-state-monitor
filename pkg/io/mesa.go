@@ -37,16 +37,24 @@ type MESAstar_info struct {
 
 // struct holding info on MESAbinary
 type MESAbinary_info struct {
-   model_number int
-   initial_don_mass, initial_acc_mass float64
-   initial_period float64
-   age float64
-   star_1_mass, star_2_mass float64
-   period float64
-   MT_case string
-   History_name string
-   donor_index, point_mass_index int
-   rel_rl_1, rel_rl_2 float64
+   ModelNumber int
+   InitialDonorMass, InitialAccretorMass float64
+   InitialPeriod float64
+   Age float64
+   Star1Mass, Star2Mass float64
+   Period float64
+   MTCase string
+   HistoryName string
+   DonorIndex, PointMassIndex int
+   RelRLOF1, RelRLOF2 float64
+}
+
+
+type CompleteBinaryInfo struct {
+   BinaryInfo *MESAbinary_info
+   Star1Info *MESAstar_info
+   Star2Info *MESAstar_info
+   Have2Stars bool
 }
 
 
