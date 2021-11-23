@@ -286,7 +286,7 @@ func Grab_binary_header (fname string, binary_info *MESAbinary_info) {
                   fmt.Println(err)
                   os.Exit(2)
                }
-               binary_info.initial_don_mass = i
+               binary_info.InitialDonorMass = i
             }
             if name == "initial_acc_mass" {
                i, err := strconv.ParseFloat(val, 64)  // i is in Msun
@@ -294,7 +294,7 @@ func Grab_binary_header (fname string, binary_info *MESAbinary_info) {
                   fmt.Println(err)
                   os.Exit(2)
                }
-               binary_info.initial_acc_mass = i
+               binary_info.InitialAccretorMass = i
             }
             if name == "initial_period_days" {
                i, err := strconv.ParseFloat(val, 64)  // i is in days
@@ -302,7 +302,7 @@ func Grab_binary_header (fname string, binary_info *MESAbinary_info) {
                   fmt.Println(err)
                   os.Exit(2)
                }
-               binary_info.initial_period = i
+               binary_info.InitialPeriod = i
             }
          }
       }
@@ -361,7 +361,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.model_number = i
+            binary_info.ModelNumber = i
          }
          if name == "age" {
             i, err := strconv.ParseFloat(val, 64)
@@ -369,7 +369,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.age = i
+            binary_info.Age = i
          }
          if name == "period_days" {
             i, err := strconv.ParseFloat(val, 64)
@@ -377,7 +377,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.period = i
+            binary_info.Period = i
          }
          if name == "star_1_mass" {
             i, err := strconv.ParseFloat(val, 64)
@@ -385,7 +385,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.star_1_mass = i
+            binary_info.Star1Mass = i
          }
          if name == "star_2_mass" {
             i, err := strconv.ParseFloat(val, 64)
@@ -393,7 +393,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.star_2_mass = i
+            binary_info.Star2Mass = i
          }
          if name == "donor_index" {
             i, err := strconv.Atoi(val)
@@ -401,7 +401,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.donor_index = i
+            binary_info.DonorIndex = i
          }
          if name == "point_mass_index" {
             i, err := strconv.Atoi(val)
@@ -409,7 +409,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.point_mass_index = i
+            binary_info.PointMassIndex = i
          }
          if name == "rl_relative_overflow_1" {
             i, err := strconv.ParseFloat(val, 64)
@@ -417,7 +417,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.rel_rl_1 = i
+            binary_info.RelRLOF1 = i
          }
          if name == "rl_relative_overflow_2" {
             i, err := strconv.ParseFloat(val, 64)
@@ -425,7 +425,7 @@ func Grab_binary_run_info (fname string, binary_info *MESAbinary_info) {
                fmt.Println(err)
                os.Exit(2)
             }
-            binary_info.rel_rl_2 = i
+            binary_info.RelRLOF2 = i
          }
       }
    }
